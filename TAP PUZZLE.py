@@ -1,7 +1,9 @@
+import sys
 from time import sleep
 
 import pygame
 import random
+import tkinter as tk
 
 
 def which_brick(clicked_position):
@@ -13,36 +15,10 @@ def which_brick(clicked_position):
     return None
 
 
-def flags(n, pos, my_list):
-    if pos == my_list[n - 1]:
-        the_flags[n - 1] = True
-        new_color = (255, 121, 77)
-    else:
-        the_flags[n - 1] = False
-        new_color = SOME_BEAUTIFUL_COLOR
-    return new_color
-
-
 def change(index):
     black_index = random_num.index(None)
     if abs(index - black_index) == size or (abs(index - black_index) == 1 and index // size == black_index // size):
         random_num[black_index], random_num[index] = random_num[index], random_num[black_index]
-    print([random_num[index] is not None and index == random_num[index] - 1 for index in range(size ** 2 - 1)])
-
-
-def false_numbers(a, b):
-    if a - b == 1 or a - b == -1:
-        if min(a, b) % size == 0:
-            return False
-    return True
-
-
-def validate(n, position1, my_list, my_dict):
-    a1 = my_list.index(my_dict[n]) + 1
-    a2 = my_list.index(position1) + 1
-    if abs(a1 - a2) == 1 or abs(a1 - a2) == size:
-        return false_numbers(a1, a2)
-    return False
 
 
 def check_win():
@@ -99,15 +75,34 @@ def draw():
                 screen.blit(text, (position[0] + x_off, position[1] + y_off))
 
 
-pygame.init()
+def set_the_size():
+    global size
+    inp = input_text.get()
+    if str(inp).isdigit():
+        size = int(inp)
+        if size > 10:
+            size = 10
+        if size < 3:
+            size = 3
+        frame.destroy()
+    else:
+        input_text.delete(0, tk.END)
 
-done = False
-r1, r2 = 700, 700
-entered_resolution = (r1, r2)
-size = int(input('Enter the size (less than 10): '))
-if size > 10:
-    size = 10
-screen = pygame.display.set_mode(entered_resolution)
+
+size = -1
+frame = tk.Tk()
+frame.title("Enter the size")
+input_text = tk.Entry(frame)
+input_text.grid(row=0, column=1)
+print_button = tk.Button(frame, text="Enter", command=set_the_size)
+print_button.grid(row=1, column=0, columnspan=2)
+lbl = tk.Label(frame, text="Enter the size (between 3 and 10): ")
+lbl.grid(row=0, column=0)
+frame.mainloop()
+
+if size == -1:
+    sys.exit()
+
 
 BRICK_SIZE = 50
 SPACE = 2
@@ -115,20 +110,24 @@ BLACK_COLOR = (0, 0, 0)
 SOME_BEAUTIFUL_COLOR = (204, 51, 0)
 CORRECT_COLOR = (255, 121, 77)
 TEXT_COLOR = (255, 255, 204)
+
+
+pygame.init()
+
+done = False
+r1, r2 = BRICK_SIZE + 2 * ((25 * (size % 2)) + (SPACE + BRICK_SIZE) * (size // 2)), BRICK_SIZE + 2 * ((25 * (size % 2)) + (SPACE + BRICK_SIZE) * (size // 2))
+entered_resolution = (r1, r2)
+screen = pygame.display.set_mode(entered_resolution)
+
 xcor = (r1 // 2) - (25 * (size % 2)) - (SPACE + BRICK_SIZE) * (size // 2)
 ycor = (r2 // 2) - (25 * (size % 2)) - (SPACE + BRICK_SIZE) * (size // 2)
 started_position = (xcor, ycor)
 
 black_position = 0
-the_list = []
-the_text = []
-the_dict = []
-the_flags = []
 font = pygame.font.Font(None, BRICK_SIZE)
 
 random_num = give_me_random_numbers()
 
-the_dict = dict(the_dict)
 
 done2 = False
 while not done:
