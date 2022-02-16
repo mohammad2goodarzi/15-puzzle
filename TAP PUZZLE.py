@@ -69,9 +69,9 @@ def draw():
                     pygame.draw.rect(screen, SOME_BEAUTIFUL_COLOR, (position[0], position[1], BRICK_SIZE, BRICK_SIZE))
                 x_off, y_off = 0, 0
                 if random_num[i * size + j] < 10:
-                    x_off, y_off = BRICK_SIZE // 4, BRICK_SIZE // 4
+                    x_off, y_off = BRICK_SIZE // 3, BRICK_SIZE // 5
                 elif random_num[i * size + j] < 100:
-                    x_off, y_off = BRICK_SIZE // 8, BRICK_SIZE // 4
+                    x_off, y_off = BRICK_SIZE // 4.5, BRICK_SIZE // 5
                 screen.blit(text, (position[0] + x_off, position[1] + y_off))
 
 
@@ -115,7 +115,7 @@ TEXT_COLOR = (255, 255, 204)
 pygame.init()
 
 done = False
-r1, r2 = BRICK_SIZE + 2 * ((25 * (size % 2)) + (SPACE + BRICK_SIZE) * (size // 2)), BRICK_SIZE + 2 * ((25 * (size % 2)) + (SPACE + BRICK_SIZE) * (size // 2))
+r1, r2 = (BRICK_SIZE * 6) + 2 * ((25 * (size % 2)) + (SPACE + BRICK_SIZE) * (size // 2)), (BRICK_SIZE * 6) + 2 * ((25 * (size % 2)) + (SPACE + BRICK_SIZE) * (size // 2))
 entered_resolution = (r1, r2)
 screen = pygame.display.set_mode(entered_resolution)
 
@@ -124,7 +124,7 @@ ycor = (r2 // 2) - (25 * (size % 2)) - (SPACE + BRICK_SIZE) * (size // 2)
 started_position = (xcor, ycor)
 
 black_position = 0
-font = pygame.font.Font(None, BRICK_SIZE)
+font = pygame.font.SysFont("comicsansms", BRICK_SIZE//2)
 
 random_num = give_me_random_numbers()
 
